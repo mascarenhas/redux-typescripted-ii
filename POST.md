@@ -33,8 +33,9 @@ export type CounterActionTypes = ActionTypesUnion<typeof counterActions>;
 export default counterActions;
 ```
 
-If you want to go straight to the code go [here](https://github.com/mascarenhas/redux-typescripted-ii),
-but please stick for the explanations below!
+If you want to go straight to the code go [to the Github repo](https://github.com/mascarenhas/redux-typescripted-ii), but please stick for the explanations below! You can also
+play with the code 
+[here](https://codesandbox.io/s/github/mascarenhas/redux-typescripted-ii/tree/master/?fontsize=14).
 
 ## Typesafe actions without the boilerplate
 
