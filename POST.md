@@ -279,7 +279,7 @@ export default connect(
 Notice how we have no duplicate declarations, and let the compiler work for us.
 All of the props we destructure for use inside `Counter` have the correct types!
 The `increment` prop needs a `number` argument for its payload, while this is
-optional for `decrement`. 
+optional for `decrement`.
 
 If we go back to our `counter.actions.ts` file and
 change the payload type for one of our actions the changes propagate without
