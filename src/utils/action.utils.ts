@@ -49,23 +49,25 @@ export function optionalPayloadAction<Payload>() {
 }
 
 export type ActionsUnion<Actions> = {
-  [A in keyof Actions]: Actions[A] extends (...args: infer Args) => Action<infer Type, infer Payload, infer Meta>
+  [A in keyof Actions]: Actions[A] extends (...args: any[]) => Action<infer Type, infer Payload, infer Meta>
     ? Action<Type, Payload, Meta>
     : never
 }[keyof Actions];
 
 export type ActionTypes<Actions> = {
   readonly [A in keyof Actions]: Actions[A] extends
-   (...args: infer Args) => Action<infer Type, infer Payload, infer Meta>
+   (...args: any[]) => { type: infer Type }
     ? IsLiteralString<Type>
     : never
 };
 
-export type ActionTypesUnion<Actions> = ActionTypes<Actions>[keyof Actions];
+export type ActionTypesUnion<ActionsUnion> = 
+  ActionsUnion extends infer A ? 
+    (A extends { type: infer Type } ? Type : never) : never;
 
-export type ActionTypesToActions<Actions> = {
-  readonly [Type in ActionTypesUnion<Actions>]: 
-    ActionsUnion<Actions> extends infer A ?
+export type ActionTypesToActions<ActionsUnion> = {
+  readonly [Type in ActionTypesUnion<ActionsUnion>]: 
+    ActionsUnion extends infer A ?
       (A extends Action<Type, infer P, infer M> ? Action<Type, P, M> : never) : never
 };
 
@@ -75,3 +77,11 @@ export type ActionProps<Actions, Picked extends keyof Actions = keyof Actions> =
 };
 
 export const ensureNever = (action: never) => action;
+
+export type PickActions<ActionsUnion, ActionTypes extends string> =
+  ActionsUnion extends infer A ?
+    (A extends { type: infer Type } ? (Type extends ActionTypes ? A : never) : never) : never;
+
+export type OmitActions<ActionsUnion, ActionTypes extends string> =
+  ActionsUnion extends infer A ?
+    (A extends { type: infer Type } ? (Type extends ActionTypes ? never : A) : never) : never;

@@ -14,6 +14,6 @@ const counterActions = readonly({
 });
 
 export type CounterActions = ActionsUnion<typeof counterActions>;
-export type CounterActionTypes = ActionTypesUnion<typeof counterActions>;
+export type CounterActionTypes = ActionTypesUnion<CounterActions>;
 
 export default counterActions;

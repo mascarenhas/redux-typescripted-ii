@@ -4,22 +4,22 @@ import {
   ActionTypesToActions
 } from './action.utils';
 
-type ReducerCase<State, Actions> = (state: State, action: ActionsUnion<Actions>) => State
+type ReducerCase<State, ActionsUnion> = (state: State, action: ActionsUnion) => State
 
-export type ObjectReducer<State, Actions> = {
-  readonly [A in ActionTypesUnion<Actions>]: (
+export type ObjectReducer<State, ActionsUnion> = {
+  readonly [A in ActionTypesUnion<ActionsUnion>]: (
     state: State,
-    action: ActionTypesToActions<Actions>[A]
+    action: ActionTypesToActions<ActionsUnion>[A]
   ) => State
 };
 
-export function createReducer<State, Actions>(
+export function createReducer<State, ActionsUnion extends { readonly type: string }>(
   initialState: State,
-  cases: ObjectReducer<State, Actions>
+  cases: ObjectReducer<State, ActionsUnion>
 ) {
-  return (state: State = initialState, action: ActionsUnion<Actions>) => {
-    const indexCases = cases as unknown as { [type: string]: ReducerCase<State, Actions> | undefined };
-    const reducerCase = indexCases[(action as { readonly type: string }).type];
+  return (state: State = initialState, action: ActionsUnion) => {
+    const indexCases = cases as unknown as { [type: string]: ReducerCase<State, ActionsUnion> | undefined };
+    const reducerCase = indexCases[action.type];
     if (reducerCase !== undefined) {
       return reducerCase(state, action);
     } else {
